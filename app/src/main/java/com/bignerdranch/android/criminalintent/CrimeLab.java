@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.bignerdranch.android.criminalintent.database.CrimeBaseHelper;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ public class CrimeLab {
     private static CrimeLab sCrimeLab;
     private Context mContext;
     private SQLiteDatabase mDatabase;
+
 
     public static CrimeLab get(Context context) {
         if (sCrimeLab == null) {
@@ -73,6 +75,11 @@ public class CrimeLab {
         }
     }
 
+    public File getPhotoFile(Crime crime){
+        File filesDir = mContext.getFilesDir();
+        return new File(filesDir, crime.getPhotoFilename());
+
+    }
     public void updateCrime(Crime crime) {
         String uuidString = crime.getId().toString();
         ContentValues values = getContentValues(crime);

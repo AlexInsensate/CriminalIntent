@@ -1,7 +1,6 @@
 package com.bignerdranch.android.criminalintent;
 
 
-
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -59,5 +58,9 @@ public class Crime {
 
     public void setSuspect(String suspect) {
         mSuspect = suspect;
+    }
+
+    public String getPhotoFilename() {
+        return "IMG_" + getId().toString() + ".jpg";
     }
 }
