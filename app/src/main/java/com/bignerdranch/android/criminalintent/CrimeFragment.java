@@ -1,6 +1,7 @@
 package com.bignerdranch.android.criminalintent;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -8,6 +9,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -60,6 +62,11 @@ public class CrimeFragment extends Fragment {
     private Button mSuspectButton;
     private ImageButton mPhotoButton;
     private ImageView mPhotoView;
+    private Callbacks mCallbacks;
+
+    public interface Callbacks {
+        void onCrimeUpdated(Crime crime);
+    }
 
 
     public static CrimeFragment newInstance(UUID crimeId) {
@@ -70,6 +77,11 @@ public class CrimeFragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallbacks = (Callbacks) context;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,6 +99,12 @@ public class CrimeFragment extends Fragment {
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_crime, container, false);
         mTitleField = v.findViewById(R.id.crime_title);
@@ -100,6 +118,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mCrime.setTitle(s.toString());
+                updateCrime();
             }
 
             @Override
@@ -213,6 +232,7 @@ public class CrimeFragment extends Fragment {
             case R.id.delete_crime:
                 CrimeLab.get(getActivity()).deleteCrime(mCrime);
                 getActivity().finish();
+                updateCrime();
                 return true;
             case R.id.call_to_suspect:
                 if (mCrime.getSuspect() == null) {
@@ -241,6 +261,7 @@ public class CrimeFragment extends Fragment {
         if (requestCode == REQUEST_DATE) {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
+            updateCrime();
             updateDate();
         } else {
             if (requestCode == REQUEST_CONTACT && data != null) {
@@ -249,8 +270,6 @@ public class CrimeFragment extends Fragment {
                         ContactsContract.Contacts._ID,
                         ContactsContract.Contacts.DISPLAY_NAME
                 };
-
-
                 Cursor c = getActivity().getContentResolver().
                         query(contactUri, queryFields, null, null, null);
                 try {
@@ -280,6 +299,7 @@ public class CrimeFragment extends Fragment {
                         sSuspectPhone = phone.getString(phone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     }
                     mCrime.setSuspect(suspect);
+                    updateCrime();
                     mSuspectButton.setText(suspect + " " + sSuspectPhone);
                     phone.close();
                 } finally {
@@ -303,10 +323,16 @@ public class CrimeFragment extends Fragment {
                             mPhotoView.setImageBitmap(bitmap);
                         }
                     });
+                    updateCrime();
                     updatePhotoView();
                 }
             }
         }
+    }
+
+    private void updateCrime() {
+        CrimeLab.get(getActivity()).updateCrime(mCrime);
+        mCallbacks.onCrimeUpdated(mCrime);
     }
 
     private void updateDate() {
