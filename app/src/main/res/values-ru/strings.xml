@@ -1,0 +1,27 @@
+
+<resources>
+    <string name="app_name">CriminalIntent</string>
+    <string name="crime_title_hint">Введите название преступления.</string>
+    <string name="crime_title_label">Название</string>
+    <string name="crime_details_label">Детали</string>
+    <string name="crime_solved_label">Решено</string>
+    <string name="date_picker_title">Дата преступления: </string>
+    <string name="time_picker_title">Время преступления:</string>
+    <string name="new_crime">Новое преступление</string>
+    <string name="show_subtitle">Показать подзаголовок</string>
+    <string name="hide_subtitle">Скрыть подзаголовок</string>
+    <string name="delete_crime">Удалить преступление</string>
+    <string name="call_suspect">Позвонить подозреваемому</string>
+    <string name="crime_suspect_text">Подозреваемый в преступлении</string>
+    <string name="crime_report_text">Отправить отчет о преступлении</string>
+
+    <string name="crime_report">%1$s! Преступление было обнаружено в %2$s. %3$s, и %4$s</string>
+    <string name="crime_report_solved">Дело раскрыто</string>
+    <string name="crime_report_unsolved">Дело не раскрыто</string>
+    <string name="crime_report_no_suspect">нет подозреваемого.</string>
+    <string name="crime_report_suspect">Подозреваемый - %s.</string>
+    <string name="crime_report_subject">Сообщение о преступлении</string>
+    <string name="send_report">Отправить преступление через </string>
+
+
+</resources>

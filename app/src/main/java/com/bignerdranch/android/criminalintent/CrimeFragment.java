@@ -19,7 +19,9 @@ import android.support.v4.app.ShareCompat;
 import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateFormat;
+
+import java.text.DateFormat;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,6 +40,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import static android.widget.CompoundButton.*;
@@ -346,8 +349,8 @@ public class CrimeFragment extends Fragment {
         } else {
             solvedString = getString(R.string.crime_report_unsolved);
         }
-        String dateFormat = "EEE, MMM dd";
-        String dateString = DateFormat.format(dateFormat, mCrime.getDate()).toString();
+        java.text.DateFormat df = java.text.DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault());
+        String dateString = df.format(mCrime.getDate());
 
         String suspect = mCrime.getSuspect();
 
